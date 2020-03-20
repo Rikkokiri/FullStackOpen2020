@@ -17,23 +17,39 @@ const Hello = ({ name, age }) => {
 const App = () => {
   const [ counter, setCounter ] = useState(0)
 
-  setTimeout(
+  /* setTimeout(
     () => setCounter(counter + 1),
     1000
-  )
+  ) */
 
-  const handleClick = () => {
-    console.log('Clicked!')
-  }
+  const increaseByOne = () => setCounter(counter + 1)
+  const decreaseByOne = () => setCounter(counter - 1)
+  const setToZero = () => setCounter(0)
 
   const nimi = 'Pekka'
   const ika = 10
 
+  const Display = ({ counter }) => <div>{counter}</div>
+
+  const Button = ({ handleClick, text }) => (
+    <button onClick={handleClick}>
+      {text}
+    </button>
+  )
+
   return (
     <div>
       <h1>Greetings</h1>
-      <div>{counter}</div>
-      <button onClick={handleClick}>Plus</button>
+      <Display counter={counter} />
+      <Button
+        handleClick={increaseByOne}
+        text='plus' />
+      <Button
+        handleClick={setToZero}
+        text='zero' />
+      <Button
+        handleClick={decreaseByOne}
+        text='minus' />
       <Hello name='Maya' age={26 + 10} />
       <Hello name={nimi} age={ika} />
     </div>
