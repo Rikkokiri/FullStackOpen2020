@@ -3,14 +3,14 @@ import Note from './components/Note'
 
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes)
-  const [newNote, setNEwNote] = useState('a new note...')
+  const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)
 
   const notesToSow = showAll ? notes : notes.filter(note => note.important)
 
   const handleNoteChange = (event) => {
     console.log(event.target.value)
-    setNEwNote(event.target.value)
+    setNewNote(event.target.value)
   }
 
   const addNote = (event) => {
@@ -23,7 +23,7 @@ const App = (props) => {
     }
 
     setNotes(notes.concat(noteObject))
-    setNEwNote('')
+    setNewNote('')
   }
 
   return (
