@@ -13,13 +13,20 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: newName,
-      id: persons.length + 1
-    }
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    // If the phone book already includes the name that user tries to add, prevent adding it.
+    // (Case insensitive check)
+    if (persons.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
+      window.alert(`${newName} is already added to the phonebook.`)
+    } else {
+      const personObject = {
+        name: newName,
+        id: persons.length + 1
+      }
+
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
   }
 
   return (
