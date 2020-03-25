@@ -41,7 +41,9 @@ const App = () => {
     // If the phone book already includes the name that user tries to add, prevent adding it.
     // (Case insensitive check)
     if (persons.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
-      window.alert(`Name '${newName}' is already in the phonebook.`)
+      if (window.confirm(`Name '${newName}' is already in the phonebook. Replace the old number with new one?`)) {
+        updateNumber(newName)
+      }
     } else if (persons.some(p => p.number === newNumber)) {
       window.alert(`The number ${newNumber} is already in the phonebook.`)
     } else if (newName === '' || newNumber === '') {
@@ -61,6 +63,21 @@ const App = () => {
           setNewNumber('')
         })
     }
+  }
+
+  const updateNumber = (name) => {
+    const person = persons.find(p => p.name.toLowerCase() === name.toLowerCase())
+    const changedPerson = { ...person, number: newNumber }
+
+    contactsService
+      .update(person.id, changedPerson)
+      .then(returnedPerson => {
+        setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+      })
+      .catch(error => {
+        console.log(error)
+        window.alert('An error occurred and update action failed.')
+      })
   }
 
   const deletePerson = person => {
