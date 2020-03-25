@@ -22,7 +22,14 @@ const App = () => {
   useEffect(hook, [query])
 
   const filterResuls = (name, countries) => {
-    return countries.filter(country => country.name.toLowerCase().includes(name.toLowerCase()))
+    // First check for exact match
+    let exactMatch = countries.filter(country => country.name.toLowerCase() === name.toLowerCase())
+    if (exactMatch.length >= 1) {
+      return exactMatch
+    } else {
+      // if exact match is not found, then just filter
+      return countries.filter(country => country.name.toLowerCase().includes(name.toLowerCase()))
+    }
   }
 
   const handleQueryChange = (event) => {
