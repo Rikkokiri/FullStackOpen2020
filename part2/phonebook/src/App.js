@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import contactsService from './services/contacts'
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterInput, setFilterInput] = useState('')
+  const [statusMessage, setStatusMessage] = useState(null) // { mgs: '', error: false }
 
   useEffect(() => {
     contactsService
@@ -42,7 +44,7 @@ const App = () => {
     // (Case insensitive check)
     if (persons.some(p => p.name.toLowerCase() === newName.toLowerCase())) {
       if (window.confirm(`Name '${newName}' is already in the phonebook. Replace the old number with new one?`)) {
-        updateNumber(newName)
+        return updateNumber(newName)
       }
     } else if (persons.some(p => p.number === newNumber)) {
       window.alert(`The number ${newNumber} is already in the phonebook.`)
@@ -58,9 +60,14 @@ const App = () => {
       contactsService
         .create(personObject)
         .then(returnedPerson => {
+          console.log(returnedPerson)
+          setNewNumber('')
+          setNewName('')
+          setStatusMessage({ msg: `Added ${returnedPerson.name}`, error: false })
+          setTimeout(() => {
+            setStatusMessage(null)
+          }, 2500)
           setPersons(persons.concat(returnedPerson))
-          setNewNumber('')
-          setNewNumber('')
         })
     }
   }
@@ -73,10 +80,21 @@ const App = () => {
       .update(person.id, changedPerson)
       .then(returnedPerson => {
         setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+        setNewNumber('')
+        setNewName('')
+        setStatusMessage({ msg: `Updated ${returnedPerson.name}'s number`, error: false })
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 2500)
       })
       .catch(error => {
         console.log(error)
-        window.alert('An error occurred and update action failed.')
+        setPersons(persons.filter(p => p.id !== person.id))
+
+        setStatusMessage({ msg: `Contact ${person.name} was already deleted from server`, error: true })
+        setTimeout(() => {
+          setStatusMessage(null)
+        }, 2500)
       })
   }
 
@@ -98,6 +116,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={statusMessage} />
       <Filter filterValue={filterInput} onChange={handleFilterChange} />
       <h2>Add New Contact</h2>
       <PersonForm

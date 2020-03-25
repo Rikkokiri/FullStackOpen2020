@@ -59,3 +59,23 @@ li button {
   padding: 0.1rem 0.5rem;
   margin-left: 1rem;
 }
+
+.status, .error {
+  border-width: 3px;
+  border-style: solid;
+  display: inline-block;
+  font-size: 1.2rem;
+  padding: 0.4rem 2rem;
+}
+
+.status {
+  border-color: lightseagreen;
+  background-color: rgba(169, 255, 201, 0.5);
+  color: rgb(0, 104, 99);
+}
+
+.error {
+  border-color: darkred;
+  background-color: rgb(248, 211, 211);
+  color: darkred;
+}

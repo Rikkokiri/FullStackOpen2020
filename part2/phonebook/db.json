@@ -24,6 +24,16 @@
       "name": "Santa Claus",
       "number": "56483657438",
       "id": 5
+    },
+    {
+      "name": "Rudolf Reindeer",
+      "number": "546784764",
+      "id": 6
+    },
+    {
+      "name": "Carol Aird",
+      "number": "5643753",
+      "id": 7
     }
   ]
 }
