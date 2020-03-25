@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import CountryList from './components/CountryList'
+import CountryDetails from './components/CountryDetails'
+
+const apiKey = process.env.REACT_APP_WEATHER_API_KEY
 
 const App = () => {
   const [matches, setMatches] = useState([])
   const [query, setQuery] = useState('')
+  const [weather, setWeather] = useState(undefined)
 
-  const hook = () => {
+  const countriesHook = () => {
     if (query !== '') {
       axios
         .get('https://restcountries.eu/rest/v2/all')
@@ -19,7 +23,26 @@ const App = () => {
     }
   }
 
-  useEffect(hook, [query])
+  useEffect(countriesHook, [query])
+
+  const weatherHook = () => {
+    console.log('weather effect')
+
+    if (matches.length === 1) {
+      const params = {
+        access_key: apiKey,
+        query: matches[0].capital
+      }
+      axios
+        .get('http://api.weatherstack.com/current', { params })
+        .then(response => {
+          console.log('Weather data', response.data.current)
+          setWeather(response.data)
+        })
+    }
+  }
+
+  useEffect(weatherHook, [matches])
 
   const filterResuls = (name, countries) => {
     // First check for exact match
@@ -49,7 +72,10 @@ const App = () => {
         value={query}
         onChange={handleQueryChange}
       />
-      <CountryList countries={matches} query={query} showButtonHandler={showCountry} />
+      {matches.length === 1
+        ? <CountryDetails country={matches[0]} weather={weather} />
+        : <CountryList countries={matches} query={query} showButtonHandler={showCountry} />
+      }
     </div>
   )
 }
