@@ -7,15 +7,22 @@ const App = (props) => {
   const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)
 
-  useEffect(() => {
+  const hook = () => {
     console.log('effect')
     axios
       .get('http://localhost:3001/notes')
       .then(response => {
-        console.log('promise fulfilled')
         setNotes(response.data)
       })
-  }, [])
+  }
+
+  /**
+   * useEffect actually takes two parameters
+   * 1. The first is a function, the effect itself.
+   * 2. The second parameter of useEffect is used to specify how often the effect is run.
+   *    If the second parameter is an empty array [], then the effect is only run along with the first render of the component.
+   */
+  useEffect(hook, [])
   console.log('render', notes.length, 'notes')
 
   const notesToSow = showAll ? notes : notes.filter(note => note.important)
