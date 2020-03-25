@@ -1,7 +1,7 @@
 import React from 'react'
 import CountryDetails from './CountryDetails'
 
-const CountryList = ({ query, countries }) => {
+const CountryList = ({ query, countries, showButtonHandler }) => {
   if (query !== '' && countries.length >= 10) {
     return (
       <p>Too many matches, specify another filter</p>
@@ -13,7 +13,14 @@ const CountryList = ({ query, countries }) => {
   } else {
     return (
       <ul>
-        {countries.map(country => <li key={country.alpha3Code}>{country.name}</li>)}
+        {countries.map(country => {
+          return <li key={country.alpha3Code}>
+            {country.name}
+            <button onClick={showButtonHandler} value={country.name}>
+              Show
+            </button>
+          </li>
+        })}
       </ul>
     )
   }

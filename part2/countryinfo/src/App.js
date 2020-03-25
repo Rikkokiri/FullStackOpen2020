@@ -36,6 +36,11 @@ const App = () => {
     setQuery(event.target.value)
   }
 
+  const showCountry = (event) => {
+    console.log(event.target.value)
+    setQuery(event.target.value)
+  }
+
   return (
     <div>
       <h1>Country Info</h1>
@@ -44,7 +49,7 @@ const App = () => {
         value={query}
         onChange={handleQueryChange}
       />
-      <CountryList countries={matches} query={query} />
+      <CountryList countries={matches} query={query} showButtonHandler={showCountry} />
     </div>
   )
 }
