@@ -53,3 +53,9 @@ ul {
 li {
   padding: 0.25rem 0;
 }
+
+li button {
+  font-size: 0.8rem;
+  padding: 0.1rem 0.5rem;
+  margin-left: 1rem;
+}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import contactsService from './services/contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,10 +11,10 @@ const App = () => {
   const [filterInput, setFilterInput] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    contactsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
@@ -53,8 +53,28 @@ const App = () => {
         id: persons.length + 1
       }
 
-      setPersons(persons.concat(personObject))
-      setNewName('')
+      contactsService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewNumber('')
+          setNewNumber('')
+        })
+    }
+  }
+
+  const deletePerson = person => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      contactsService
+        .remove(person.id)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+        .catch(error => {
+          console.log(error)
+          window.alert(`The contact '${person.name} was already deleted from server.'`)
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
     }
   }
 
@@ -71,7 +91,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
