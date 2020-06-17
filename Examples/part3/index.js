@@ -46,6 +46,16 @@ app.delete('api/notes/:id', (req, res) => {
   res.status(204).end()
 })
 
+app.post('/api/notes', (req, res) => {
+  const note = req.body
+
+  const maxId = notes.length > 0 ? Math.max(...notes.map(n => n.id)) : 0
+  note.id = maxId + 1
+  notes = notes.concat(note)
+
+  res.json(note)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
